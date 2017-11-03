@@ -1,0 +1,64 @@
+
+/* fallback for earlier versions of Firefox */
+
+@supports not (flex-wrap: wrap) {
+    .masonary { display: block; }
+    .masonary .masonry-tile {  
+        display: inline-block;
+        vertical-align: top;
+    }
+}
+
+.masonary { 
+    display: flex; 
+    flex-direction: column; 
+    flex-wrap: wrap;
+    height: 100vh;
+    font-size: 0;  
+    overflow: scroll;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/darkness.png');
+}
+
+.masonary .masonry-tile {  
+    width: 90%;
+} 
+
+
+.masonary .masonry-tile.active {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.6);
+} 
+.masonary .masonry-tile.active img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+} 
+
+
+.masonary img {  
+    width: 100%;
+} 
+
+@media only screen and (min-width: 768px)  {
+    
+    .masonary { 
+        display: flex; 
+        flex-direction: column; 
+        flex-wrap: wrap;
+        height: 100vh;
+        font-size: 0;  
+    }
+    .masonary .masonry-tile {  
+        width: 23%;
+    } 
+
+    
+
+}
