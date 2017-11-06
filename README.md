@@ -1,4 +1,4 @@
-#Front End Homework
+# Front End Homework
 
 I implemented a React app that calls the Giphy API for alien gifs.
 
