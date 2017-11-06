@@ -10,54 +10,69 @@ import './GifList.styles.css';
 class gifList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loaded: 15
+    };
     this.handleScroll = this.handleScroll.bind(this);
   }
   componentWillMount() { // HERE WE ARE TRIGGERING THE ACTION
-     this.props.gifActions.fetchgifs();
-   }
-   
+    this.getGifs();
+  }
+
   handleScroll() {
-    const windowWidth = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
-    const body = document.body;
-    const html = document.documentElement;
-    const docWidth = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth,  html.scrollWidth, html.offsetWidth);
-    const windowRight = windowWidth + window.pageXOffset;
-    console.log(windowRight, docWidth)
-    if (windowRight >= docWidth) {
+    var el = document.getElementById('masonary-scroller');
+    var minPixel = el.offsetLeft;
+    var maxPixel = minPixel + el.scrollWidth;
+    var value = this.ref.scrollLeft + Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    // respect bounds of element
+    var percent = (value - minPixel)/(maxPixel - minPixel);
+    percent = Math.min(1,Math.max(percent, 0))*100;
+
+    if (value >= maxPixel) {
       this.setState({
-        message:'right reached'
+        loaded: this.state.loaded + 15
       });
-    } else {
-      this.setState({
-        message:'not at right'
-      });
+      this.getGifs();
     }
+  }
+
+  getGifs () {
+
+     this.props.gifActions.fetchgifs({
+       search: 'aliens',
+       quantity: this.state.loaded
+     });
   }
 
   componentDidMount() {
     this.ref.addEventListener("scroll", this.handleScroll);
   }
-  
-  renderData() {  
+
+  renderData() {
     return (
-      <div className="masonary" ref={ref => { this.ref = ref; }}>
+      <div className="masonary" id="masonary-scroller" ref={ref => { this.ref = ref; }}>
         {this.props.gifs.map((gif, i) => {
           return (
             <GifListItem key={i}>
-              <img src={gif.images.original.url} />
+              <div className="GifList-item__hover">
+                <span>
+                  Click to View
+                </span>
+              </div>
+              <div className="GifList-item__image">
+                <img src={gif.images.original.url} />
+              </div>
             </GifListItem>
           )
         })}
       </div>
     );
   }
-  
-  
+
+
   render() {
     return (
       <div className="">
-          {this.state.message}
           {this.props ?
             this.renderData()
             :
